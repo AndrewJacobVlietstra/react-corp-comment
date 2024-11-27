@@ -1,6 +1,6 @@
 export default function Footer() {
 	return (
-		<footer>
+		<footer className="footer">
 			<small>
 				<p>
 					&copy; Copyright by CorpComment. Intended for learning React,
