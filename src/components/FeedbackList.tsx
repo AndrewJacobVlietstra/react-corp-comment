@@ -1,35 +1,47 @@
+import { useEffect, useState } from "react";
 import FeedbackItem from "./FeedbackItem";
+import Spinner from "./Spinner";
+import ErrorMessage from "./ErrorMessage";
 
 export default function FeedbackList() {
-	const feedbackItems = [
-		{
-			upVoteCount: 550,
-			badgeLetter: "S",
-			companyName: "Starbucks",
-			text: "The coffee there is sooo good",
-			daysAgo: 3,
-		},
-		{
-			upVoteCount: 420,
-			badgeLetter: "B",
-			companyName: "ByteGrad",
-			text: "Does good educational content",
-			daysAgo: 5,
-		},
-		{
-			upVoteCount: 727,
-			badgeLetter: "C",
-			companyName: "CorpComment",
-			text: "Make comments but publicly, anytime, anywhere!",
-			daysAgo: 1,
-		},
-	];
+	const [feedbackItems, setFeedbackItems] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
+
+	useEffect(() => {
+		setIsLoading(true);
+		fetch(
+			`https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks`
+		)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error();
+				}
+				return response.json();
+			})
+			.then((data) => {
+				setFeedbackItems(data.feedbacks);
+				setIsLoading(false);
+				return setIsError(false);
+			})
+			.catch((error) => {
+				setIsLoading(false);
+				setIsError(true);
+				return console.error(error);
+			});
+	}, []);
 
 	return (
-		<ol className="feedback-list">
-			{feedbackItems.map((item) => (
-				<FeedbackItem key={item.text} feedbackItem={item} />
-			))}
-		</ol>
+		<>
+			<ol className="feedback-list">
+				{isLoading ? <Spinner /> : null}
+
+				{isError ? <ErrorMessage message={"Something Went Wrong!"} /> : null}
+
+				{feedbackItems.map((item) => (
+					<FeedbackItem key={item.id} feedbackItem={item} />
+				))}
+			</ol>
+		</>
 	);
 }
