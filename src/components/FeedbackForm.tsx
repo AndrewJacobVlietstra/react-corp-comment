@@ -1,17 +1,16 @@
 import { ChangeEvent, useState } from "react";
-import { MAX_CHARACTERS } from "../lib/constants";
+import { FEEDBACK_FORM_MAX_CHARACTERS } from "../lib/constants";
 
 type TextAreaChangeEvent = ChangeEvent<HTMLTextAreaElement>;
 
 export default function FeedbackForm() {
 	const [text, setText] = useState("");
-	const charCount = MAX_CHARACTERS - text.length;
+	const charactersRemaining = FEEDBACK_FORM_MAX_CHARACTERS - text.length;
 
 	const handleTextChange = (e: TextAreaChangeEvent) => {
 		const currentText = e.target.value;
-		if (currentText.length > MAX_CHARACTERS) {
-			return;
-		}
+		const charLimitReached = currentText.length > FEEDBACK_FORM_MAX_CHARACTERS;
+		if (charLimitReached) return;
 		return setText(currentText);
 	};
 
@@ -29,7 +28,11 @@ export default function FeedbackForm() {
 			</label>
 
 			<div>
-				<p className="u-italic">{charCount}</p>
+				<p className="u-italic">
+					{charactersRemaining === 0
+						? `0 Max Limit Reached!`
+						: charactersRemaining}
+				</p>
 				<button>
 					<span>Submit</span>
 				</button>

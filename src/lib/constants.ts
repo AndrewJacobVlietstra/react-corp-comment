@@ -1,1 +1,1 @@
-export const MAX_CHARACTERS = 150;
+export const FEEDBACK_FORM_MAX_CHARACTERS = 150;
