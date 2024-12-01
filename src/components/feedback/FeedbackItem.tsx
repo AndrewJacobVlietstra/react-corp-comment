@@ -1,5 +1,5 @@
 import { TriangleUpIcon } from "@radix-ui/react-icons";
-import { feedbackItem } from "../lib/types";
+import { feedbackItem } from "../../lib/types";
 
 type feedbackItemProps = {
 	feedbackItem: feedbackItem;
@@ -24,7 +24,7 @@ export default function FeedbackItem({ feedbackItem }: feedbackItemProps) {
 				<p>{text}</p>
 			</div>
 
-			<p>{daysAgo}d</p>
+			<p>{daysAgo === 0 ? "NEW" : `${daysAgo}d`}</p>
 		</li>
 	);
 }

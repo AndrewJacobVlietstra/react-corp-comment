@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FEEDBACK_FORM_MAX_CHARACTERS } from "../lib/constants";
+import { FEEDBACK_FORM_MAX_CHARACTERS } from "../../lib/constants";
 
 type TextAreaChangeEvent = React.ChangeEvent<HTMLTextAreaElement>;
 type FormEvent = React.FormEvent<HTMLFormElement>;

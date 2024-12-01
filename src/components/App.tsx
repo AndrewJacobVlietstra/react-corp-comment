@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { feedbackItem } from "../lib/types";
-import Container from "./Container";
-import Footer from "./Footer";
+import { FEEDBACK_ITEMS_URL } from "../lib/constants";
 import HashtagList from "./HashtagList";
+import Footer from "./layout/Footer";
+import Container from "./layout/Container";
 
 function App() {
 	const [feedbackItems, setFeedbackItems] = useState<feedbackItem[] | []>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
-	const handleAddToList = (text: string) => {
+	const handleAddToList = async (text: string) => {
 		const company = text
 			.split(" ")
 			.find((word) => word.includes("#"))!
@@ -25,15 +26,22 @@ function App() {
 		};
 
 		setFeedbackItems([...feedbackItems, newItem]);
+
+		await fetch(FEEDBACK_ITEMS_URL, {
+			method: "POST",
+			body: JSON.stringify(newItem),
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+		});
 	};
 
 	useEffect(() => {
 		const fetchFeedbackItems = async () => {
 			setIsLoading(true);
 			try {
-				const response = await fetch(
-					`https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks`
-				);
+				const response = await fetch(FEEDBACK_ITEMS_URL);
 
 				if (!response.ok) {
 					throw new Error();
