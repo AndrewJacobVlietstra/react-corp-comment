@@ -3,6 +3,6 @@ export type feedbackItem = {
 	daysAgo: number;
 	upvoteCount: number;
 	text: string;
-	companyName: string;
+	company: string;
 	badgeLetter: string;
 };

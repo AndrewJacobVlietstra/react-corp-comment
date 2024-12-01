@@ -10,7 +10,7 @@ function App() {
 	const [isError, setIsError] = useState(false);
 
 	const handleAddToList = (text: string) => {
-		const companyName = text
+		const company = text
 			.split(" ")
 			.find((word) => word.includes("#"))!
 			.substring(1);
@@ -20,8 +20,8 @@ function App() {
 			text: text,
 			upvoteCount: 0,
 			daysAgo: 0,
-			companyName,
-			badgeLetter: companyName.substring(0, 1).toUpperCase(),
+			company,
+			badgeLetter: company.substring(0, 1).toUpperCase(),
 		};
 
 		setFeedbackItems([...feedbackItems, newItem]);

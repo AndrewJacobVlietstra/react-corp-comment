@@ -6,7 +6,7 @@ type feedbackItemProps = {
 };
 
 export default function FeedbackItem({ feedbackItem }: feedbackItemProps) {
-	const { upvoteCount, badgeLetter, companyName, text, daysAgo } = feedbackItem;
+	const { upvoteCount, badgeLetter, company, text, daysAgo } = feedbackItem;
 
 	return (
 		<li className="feedback">
@@ -20,7 +20,7 @@ export default function FeedbackItem({ feedbackItem }: feedbackItemProps) {
 			</div>
 
 			<div>
-				<p>{companyName}</p>
+				<p>{company}</p>
 				<p>{text}</p>
 			</div>
 
