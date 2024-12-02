@@ -15,7 +15,7 @@ export default function HashtagList({
 				<HashtagItem
 					key={company}
 					company={company}
-					onSelectedCompany={handleSelectedCompany}
+					onSelectCompany={handleSelectedCompany}
 				/>
 			))}
 		</ul>

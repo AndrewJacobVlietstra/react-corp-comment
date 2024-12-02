@@ -12,16 +12,13 @@ function App() {
 	const [selectedCompany, setSelectedCompany] = useState("all");
 
 	const selectedFeedbackItems = feedbackItems.filter((item) => {
-		if (selectedCompany === "all") {
+		if (selectedCompany === "all") return item;
+		if (item.company.toLowerCase() === selectedCompany.toLowerCase())
 			return item;
-		}
-		if (item.company === selectedCompany) {
-			return item;
-		}
 	});
 
 	const companyList = feedbackItems
-		.map((item) => item.company)
+		.map((item) => item.company.toLowerCase())
 		.filter((company, index, array) => array.indexOf(company) === index);
 
 	const handleAddToList = async (text: string) => {
@@ -52,8 +49,9 @@ function App() {
 	};
 
 	const handleSelectedCompany = (company: string) => {
-		if (selectedCompany === company) return setSelectedCompany("all");
-		return setSelectedCompany(company);
+		selectedCompany === company
+			? setSelectedCompany("all")
+			: setSelectedCompany(company);
 	};
 
 	useEffect(() => {
