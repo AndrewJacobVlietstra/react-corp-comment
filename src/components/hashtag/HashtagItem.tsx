@@ -1,4 +1,4 @@
-import { CapitalizeString } from "../../lib/utility";
+import { capitalizeString } from "../../lib/utility";
 
 type HashtagItemProps = {
 	company: string;
@@ -11,7 +11,7 @@ export default function HashtagItem({
 }: HashtagItemProps) {
 	return (
 		<li>
-			<button onClick={() => onSelectCompany(company)}>{`#${CapitalizeString(
+			<button onClick={() => onSelectCompany(company)}>{`#${capitalizeString(
 				company
 			)}`}</button>
 		</li>

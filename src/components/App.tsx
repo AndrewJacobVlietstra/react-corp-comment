@@ -1,25 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { feedbackItem } from "../lib/types";
 import { FEEDBACK_ITEMS_URL } from "../lib/constants";
 import HashtagList from "./hashtag/HashtagList";
 import Footer from "./layout/Footer";
 import Container from "./layout/Container";
 
-function App() {
+export default function App() {
 	const [feedbackItems, setFeedbackItems] = useState<feedbackItem[] | []>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [selectedCompany, setSelectedCompany] = useState("all");
 
-	const selectedFeedbackItems = feedbackItems.filter((item) => {
-		if (selectedCompany === "all") return item;
-		if (item.company.toLowerCase() === selectedCompany.toLowerCase())
-			return item;
-	});
+	const selectedFeedbackItems = useMemo(
+		() =>
+			feedbackItems.filter((item) => {
+				if (selectedCompany === "all") return item;
+				if (item.company.toLowerCase() === selectedCompany.toLowerCase())
+					return item;
+			}),
+		[feedbackItems, selectedCompany]
+	);
 
-	const companyList = feedbackItems
-		.map((item) => item.company.toLowerCase())
-		.filter((company, index, array) => array.indexOf(company) === index);
+	const companyList = useMemo(
+		() =>
+			feedbackItems
+				.map((item) => item.company.toLowerCase())
+				.filter((company, index, array) => array.indexOf(company) === index),
+		[feedbackItems]
+	);
 
 	const handleAddToList = async (text: string) => {
 		const company = text
@@ -94,5 +102,3 @@ function App() {
 		</div>
 	);
 }
-
-export default App;
