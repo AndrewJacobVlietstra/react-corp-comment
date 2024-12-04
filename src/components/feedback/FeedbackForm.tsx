@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { FEEDBACK_FORM_MAX_CHARACTERS } from "../../lib/constants";
+import { useFeedbackItemsContext } from "../../lib/hooks";
 
 type TextAreaChangeEvent = React.ChangeEvent<HTMLTextAreaElement>;
 type FormEvent = React.FormEvent<HTMLFormElement>;
 
-type FeedbackFormProps = {
-	onAddToList: (text: string) => void;
-};
-
-export default function FeedbackForm({ onAddToList }: FeedbackFormProps) {
+export default function FeedbackForm() {
 	const [text, setText] = useState("");
 	const [showValidIndicator, setShowValidIndicator] = useState(false);
 	const [showInvalidIndicator, setShowInvalidIndicator] = useState(false);
 	const charactersRemaining = FEEDBACK_FORM_MAX_CHARACTERS - text.length;
+	const { handleAddToList } = useFeedbackItemsContext();
 
 	const handleTextChange = (e: TextAreaChangeEvent) => {
 		const currentText = e.target.value;
@@ -33,7 +31,7 @@ export default function FeedbackForm({ onAddToList }: FeedbackFormProps) {
 			return setTimeout(() => setShowInvalidIndicator(false), 2000);
 		}
 
-		onAddToList(text);
+		handleAddToList(text);
 		setText("");
 	};
 
