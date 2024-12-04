@@ -1,6 +1,7 @@
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { feedbackItem } from "../lib/types";
 import { FEEDBACK_ITEMS_URL } from "../lib/constants";
+import { useFeedbackItems } from "../lib/hooks";
 
 type FeedbackItemsContextProviderProps = {
 	children: React.ReactNode;
@@ -22,10 +23,9 @@ export const FeedbackItemsContext = createContext<TFeedbackItemsContext | null>(
 export default function FeedbackItemsContextProvider({
 	children,
 }: FeedbackItemsContextProviderProps) {
-	const [feedbackItems, setFeedbackItems] = useState<feedbackItem[] | []>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [isError, setIsError] = useState(false);
 	const [selectedCompany, setSelectedCompany] = useState("all");
+	const { feedbackItems, setFeedbackItems, isLoading, isError } =
+		useFeedbackItems();
 
 	const selectedFeedbackItems = useMemo(
 		() =>
@@ -37,12 +37,6 @@ export default function FeedbackItemsContextProvider({
 		[feedbackItems, selectedCompany]
 	);
 
-	const handleSelectedCompany = (company: string) => {
-		selectedCompany === company
-			? setSelectedCompany("all")
-			: setSelectedCompany(company);
-	};
-
 	const companyList = useMemo(
 		() =>
 			feedbackItems
@@ -50,6 +44,12 @@ export default function FeedbackItemsContextProvider({
 				.filter((company, index, array) => array.indexOf(company) === index),
 		[feedbackItems]
 	);
+
+	const handleSelectedCompany = (company: string) => {
+		selectedCompany === company
+			? setSelectedCompany("all")
+			: setSelectedCompany(company);
+	};
 
 	const handleAddToList = async (text: string) => {
 		const company = text
@@ -77,28 +77,6 @@ export default function FeedbackItemsContextProvider({
 			},
 		});
 	};
-
-	useEffect(() => {
-		const fetchFeedbackItems = async () => {
-			setIsLoading(true);
-			try {
-				const response = await fetch(FEEDBACK_ITEMS_URL);
-
-				if (!response.ok) {
-					throw new Error();
-				}
-
-				const data = await response.json();
-				setFeedbackItems(data.feedbacks);
-				setIsError(false);
-			} catch (error) {
-				setIsError(true);
-			}
-			setIsLoading(false);
-		};
-
-		fetchFeedbackItems();
-	}, []);
 
 	return (
 		<FeedbackItemsContext.Provider
